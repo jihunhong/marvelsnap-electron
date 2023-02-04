@@ -1,4 +1,4 @@
-const { app, shell, BrowserWindow, Tray, Menu, nativeImage } = require("electron");
+const { app, shell, BrowserWindow, Tray, Menu, nativeImage, Notification, dialog } = require("electron");
 const path = require('path');
 const fs = require('fs');
 const { parseAsJSONIfNeeded } = require("./events");
@@ -8,7 +8,13 @@ app.whenReady().then(() => {
   console.log(win.isVisible());
   win.hide();
   settingTray();
-});
+}).then(() => {
+  if (process.platform === 'win32') {
+    if(process.argv[1] == '--squirrel-firstrun'){
+      showNotification();
+    }
+  }
+})
 
 
 function settingTray() {
@@ -23,13 +29,25 @@ function settingTray() {
       },
     },
     {
-      label: "닫기",
+      label: '시작프로그램 등록',
+      type: 'normal',
+      click() {
+        app.setLoginItemSettings({
+          openAtLogin: true
+        })
+      }
+    },
+    {
+      label: "종료",
       type: "normal",
       role: "quit",
     },
   ]);
   tray.setContextMenu(contextMenu);
+}
 
+function showNotification({ title = 'Welcome', body = 'Snapsco에 컬렉션 데이터를 연동 할 수 있습니다'}) {
+  new Notification({ title, body }).show();
 }
 
 function dataSync(){
