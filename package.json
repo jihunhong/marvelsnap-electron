@@ -32,6 +32,9 @@
     "win": {
       "target": "nsis"
     },
+    "nsis": {
+      "createDesktopShortcut": true
+    },
     "directories": {
       "output": "dist"
     }
