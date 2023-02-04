@@ -14,8 +14,6 @@ app
   .then(() => {
     settingTray();
     autoUpdater.checkForUpdates();
-  })
-  .then(() => {
     if (isWindow()) {
       if (process.argv[1] == "--squirrel-firstrun")
         showNotification({
@@ -26,18 +24,25 @@ app
   });
 
 autoUpdater.on("update-available", (info) => {
-  let pth = autoUpdater.downloadUpdate();
-  console.log(pth);
+  autoUpdater.downloadUpdate();
 });
 
 autoUpdater.on("update-not-available", (info) => {
-  console.log("no update avaliable");
 });
 
 autoUpdater.on("update-downloaded", (info) => {
-  console.log("update downloaded");
+  showNotification({ title: `업데이트가 다운로드 되었습니다 - v${app.getVersion()}`, body: '프로그램을 재시작하여 업데이트된 내역을 적용해주세요'});
 });
 
 autoUpdater.on("error", (info) => {
   console.log(info);
+});
+
+//Global exception handler
+process.on("uncaughtException", function (err) {
+  console.log(err);
+});
+
+app.on("window-all-closed", function () {
+  if (process.platform != "darwin") app.quit();
 });
