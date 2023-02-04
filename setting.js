@@ -39,6 +39,10 @@ exports.settingTray = function () {
       },
     },
     {
+      label: `Current version : ${app.getVersion()}`,
+      type: "normal",
+    },
+    {
       label: "종료",
       type: "normal",
       role: "quit",
