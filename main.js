@@ -1,17 +1,11 @@
-const {
-  app,
-  Tray,
-  Menu,
-  nativeImage,
-  Notification,
-} = require("electron");
+const { app, Tray, Menu, nativeImage, Notification } = require("electron");
 const path = require("path");
 const fs = require("fs");
 const { parseAsJSONIfNeeded } = require("./events");
-const {getUser, update, create} = require("./api");
+const { getUser, update, create } = require("./api");
 const iconPath = path.join(__dirname, "./icon.png");
 
-if (process.platform === 'win32') app.setAppUserModelId('snapsco');
+if (process.platform === "win32") app.setAppUserModelId("Snapsco Tracker");
 app
   .whenReady()
   .then(() => {
@@ -19,8 +13,11 @@ app
   })
   .then(() => {
     if (process.platform === "win32") {
-      if (process.argv[1] == "--squirrel-firstrun") 
-        showNotification({ title : 'Welcome', body: "컬렉션 데이터를 연동 할 수 있습니다" });
+      if (process.argv[1] == "--squirrel-firstrun")
+        showNotification({
+          title: "Welcome",
+          body: "컬렉션 데이터를 연동 할 수 있습니다",
+        });
     }
   });
 
@@ -52,10 +49,7 @@ function settingTray() {
   tray.setContextMenu(contextMenu);
 }
 
-function showNotification({
-  title,
-  body,
-}) {
+function showNotification({ title, body }) {
   new Notification({ title, body, icon: iconPath }).show();
 }
 
@@ -74,9 +68,11 @@ function dataSync() {
   const file = fs.readFileSync(filePath, { encoding: "utf8" });
   const json = parseAsJSONIfNeeded(file);
   const profileId = json.ServerState.Account.Id;
-  const cards = Array.from(new Set(json.ServerState.Cards.map((c) => c.CardDefId)));
+  const cards = Array.from(
+    new Set(json.ServerState.Cards.map((c) => c.CardDefId))
+  );
 
   getUser(profileId)
-    .then(id => update(id, profileId, cards))
-    .catch(() => create(profileId, cards))
+    .then((id) => update(id, profileId, cards))
+    .catch(() => create(profileId, cards));
 }
