@@ -1,6 +1,5 @@
 const {
   app,
-  BrowserWindow,
   Tray,
   Menu,
   nativeImage,
@@ -9,8 +8,10 @@ const {
 const path = require("path");
 const fs = require("fs");
 const { parseAsJSONIfNeeded } = require("./events");
-const { default: axios } = require("axios");
+const {getUser, update, create} = require("./api");
+const iconPath = path.join(__dirname, "./icon.png");
 
+if (process.platform === 'win32') app.setAppUserModelId('snapsco');
 app
   .whenReady()
   .then(() => {
@@ -18,13 +19,11 @@ app
   })
   .then(() => {
     if (process.platform === "win32") {
-      // if (process.argv[1] == "--squirrel-firstrun")
-      showNotification();
+      showNotification({ title : 'Welcome', body: "컬렉션 데이터를 연동 할 수 있습니다" });
     }
   });
 
 function settingTray() {
-  const iconPath = path.join(__dirname, "./electron.png");
   const tray = new Tray(nativeImage.createFromPath(iconPath));
   const contextMenu = Menu.buildFromTemplate([
     {
@@ -53,10 +52,10 @@ function settingTray() {
 }
 
 function showNotification({
-  title = "Welcome",
-  body = "Snapsco에 컬렉션 데이터를 연동 할 수 있습니다",
+  title,
+  body,
 }) {
-  new Notification({ title, body }).show();
+  new Notification({ title, body, icon: iconPath }).show();
 }
 
 function dataSync() {
@@ -74,14 +73,9 @@ function dataSync() {
   const file = fs.readFileSync(filePath, { encoding: "utf8" });
   const json = parseAsJSONIfNeeded(file);
   const profileId = json.ServerState.Account.Id;
-  const cards = Array.from(new Set(json.Cards.map((c) => c.CardDefId)));
-  axios
-    .post(`${process.env.END_POINT}/api/collections/user_collection/records`, {
-      profileId,
-      cards: JSON.stringify(cards),
-    })
-    .then((res) => {
-      shell.openExternal(`https://snapsco.net/p/${profileId}`);
-    })
-    .catch((err) => {});
+  const cards = Array.from(new Set(json.ServerState.Cards.map((c) => c.CardDefId)));
+
+  getUser(profileId)
+    .then(id => update(id, profileId, cards))
+    .catch(() => create(profileId, cards))
 }
