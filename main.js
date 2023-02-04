@@ -19,7 +19,8 @@ app
   })
   .then(() => {
     if (process.platform === "win32") {
-      showNotification({ title : 'Welcome', body: "컬렉션 데이터를 연동 할 수 있습니다" });
+      if (process.argv[1] == "--squirrel-firstrun") 
+        showNotification({ title : 'Welcome', body: "컬렉션 데이터를 연동 할 수 있습니다" });
     }
   });
 
