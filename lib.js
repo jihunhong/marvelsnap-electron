@@ -11,9 +11,6 @@ exports.isWindow = function () {
 };
 
 exports.getLogPath = function () {
-  if (isMac()) {
-    return `~/Library/Containers/SNAP/Data/Documents/Standalone/States/nvprod/CollectionState.json`;
-  }
   return path.join(
     app.getPath("home"),
     "AppData",
