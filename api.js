@@ -5,10 +5,12 @@ const { shell } = require("electron");
  * @param {string} profileId
  */
 
+axios.default.baseUrl = process.env.END_POINT;
+
 exports.getUser = function (profileId) {
   return new Promise((resolve, reject) => {
     axios
-      .get(`https://api.snapsco.net/api/collections/user_collection/records`, {
+      .get(`/api/collections/user_collection/records`, {
         params: {
           filter: `(profileId="${profileId}")`,
         },
@@ -41,7 +43,7 @@ exports.update = function (id, profileId, cards) {
   return new Promise((resolve, reject) => {
     axios
       .patch(
-        `https://api.snapsco.net/api/collections/user_collection/records/${id}`,
+        `/api/collections/user_collection/records/${id}`,
         {
           profileId,
           cards: JSON.stringify(cards),
@@ -65,7 +67,7 @@ exports.update = function (id, profileId, cards) {
 exports.create = function (profileId, cards) {
   return new Promise((resolve, reject) => {
     axios
-      .post(`https://api.snapsco.net/api/collections/user_collection/records`, {
+      .post(`/api/collections/user_collection/records`, {
         profileId,
         cards: JSON.stringify(cards),
       })
