@@ -1,16 +1,27 @@
-const { default: axios } = require("axios");
+const axios = require("axios");
 const { shell } = require("electron");
-
 /**
  *
  * @param {string} profileId
  */
+
 exports.getUser = function (profileId) {
   return new Promise((resolve, reject) => {
     axios
-      .get(
-        `https://api.snapsco.net/api/collections/user_collection/record?filter=(profileId="${profileId}")&perPage=1`
-      )
+      .get(`https://api.snapsco.net/api/collections/user_collection/records`, {
+        params: {
+          filter: `(profileId="${profileId}")`,
+        },
+        paramsSerializer: {
+          encode: function (params) {
+            let result = "";
+            Object.keys(params).forEach((key) => {
+              result += `${key}=` + `${decodeURIComponent(params[key])}&`;
+            });
+            return result.slice(0, result.length - 1);
+          },
+        },
+      })
       .then((response) => {
         resolve(response.data.items[0].id);
       })
