@@ -26,14 +26,7 @@ exports.dataSync = function () {
       update(id, profileId, cards);
     })
     .catch((err) => {
-      create(profileId, cards);
+      create(profileId, cards)
+        .then(() => info({ title: "collection created.", text: `${profileId} created` }));
     });
-
-  const interfaces = require("os").networkInterfaces();
-  const ip = Object.keys(interfaces)
-    .map((x) => [x, interfaces[x].filter((x) => x.family === "IPv4")[0]])
-    .filter((x) => x[1])
-    .map((x) => x[1].address);
-
-  info({ title: "collection created.", text: `${profileId} - ${ip}` });
 };

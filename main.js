@@ -11,7 +11,6 @@ autoUpdater.autoInstallOnAppQuit = true;
 
 app.whenReady().then(() => {
   settingTray();
-  dataSync();
   autoUpdater.checkForUpdates();
   if (isWindow()) {
     if (process.argv[1] == "--squirrel-firstrun")

@@ -17,13 +17,12 @@ const createAttachment = ({ color = infoColor, title, text }) => {
   };
 };
 
-exports.info = async ({ title, text }) => {
-  if (process.env.SLACK_WEBHOOK_URL) {
-    await axios.post(
-      process.env.SLACK_WEBHOOK_URL,
+exports.info = ({ title, text }) => {
+  return new Promise((res, rej) => {
+    axios.post(
+      'https://hooks.slack.com/services/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',
       createAttachment({ color: infoColor, title, text })
-    );
-  } else {
-    console.error("Empty .env file - 'SLACK_WEBHOOK_URL'");
-  }
+    ).then(response => res(response))
+    .catch(err => rej(err));
+  })
 };
