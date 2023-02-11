@@ -1,5 +1,5 @@
 const { nativeImage, Menu, app, Tray } = require("electron");
-const { dataSync } = require("./feature");
+const { dataSync, openProfilePage } = require("./feature");
 const path = require("path");
 const { isMac } = require("./lib");
 const sharp = require("sharp");
@@ -29,14 +29,21 @@ exports.settingTray = function () {
         dataSync();
       },
     },
+    // {
+    //   label: "시작프로그램 등록",
+    //   type: "normal",
+    //   click() {
+    //     app.setLoginItemSettings({
+    //       openAtLogin: true,
+    //     });
+    //   },
+    // },
     {
-      label: "시작프로그램 등록",
-      type: "normal",
+      label: '프로필 페이지 열기',
+      type: 'normal',
       click() {
-        app.setLoginItemSettings({
-          openAtLogin: true,
-        });
-      },
+        openProfilePage();
+      }
     },
     {
       label: `Current version : ${app.getVersion()}`,
