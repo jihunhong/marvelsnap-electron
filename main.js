@@ -1,5 +1,5 @@
 const { app } = require("electron");
-const { showNotification, dataSync } = require("./feature");
+const { showNotification, dataSync, autoSync } = require("./feature");
 const { autoUpdater, AppUpdater } = require("electron-updater");
 const { settingTray } = require("./setting");
 const { isWindow } = require("./lib");
@@ -12,6 +12,7 @@ autoUpdater.autoInstallOnAppQuit = true;
 app.whenReady().then(() => {
   settingTray();
   autoUpdater.checkForUpdates();
+  autoSync();
   if (isWindow()) {
     if (process.argv[1] == "--squirrel-firstrun")
       showNotification({

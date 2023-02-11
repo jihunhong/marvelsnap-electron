@@ -37,7 +37,7 @@ exports.getUser = function (profileId) {
  * @param {string} profileId
  * @param {string[]} cards
  */
-exports.update = function (id, profileId, cards) {
+exports.update = function (id, profileId, cards, { open = false }) {
   return new Promise((resolve, reject) => {
     axios
       .patch(
@@ -48,7 +48,7 @@ exports.update = function (id, profileId, cards) {
         }
       )
       .then((response) => {
-        shell.openExternal(`https://snapsco.net/p/${profileId}`);
+        open ? shell.openExternal(`https://snapsco.net/p/${profileId}`) : null;
         resolve(response);
       })
       .catch((err) => {
@@ -62,7 +62,7 @@ exports.update = function (id, profileId, cards) {
  * @param {string} profileId
  * @param {string[]} cards
  */
-exports.create = function (profileId, cards) {
+exports.create = function (profileId, cards, { open = false }) {
   return new Promise((resolve, reject) => {
     axios
       .post(`https://api.snapsco.net/api/collections/user_collection/records`, {
@@ -70,7 +70,7 @@ exports.create = function (profileId, cards) {
         cards: JSON.stringify(cards),
       })
       .then((response) => {
-        shell.openExternal(`https://snapsco.net/p/${profileId}`);
+        open ? shell.openExternal(`https://snapsco.net/p/${profileId}`) : null;
         resolve(response);
       })
       .catch((err) => {
