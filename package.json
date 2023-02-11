@@ -1,6 +1,6 @@
 {
   "name": "marvelsnap-electorn",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "description": "snapsco desktop client",
   "main": "main.js",
   "scripts": {
