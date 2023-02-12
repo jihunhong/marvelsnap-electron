@@ -1,6 +1,6 @@
 const { app } = require("electron");
-const { showNotification, dataSync, autoSync } = require("./feature");
-const { autoUpdater, AppUpdater } = require("electron-updater");
+const { showNotification, autoSync } = require("./feature");
+const { autoUpdater } = require("electron-updater");
 const { settingTray } = require("./setting");
 const { isWindow } = require("./lib");
 

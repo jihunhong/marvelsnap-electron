@@ -1,8 +1,7 @@
-const { app } = require("electron");
+const { app, Notification } = require("electron");
 const os = require("os");
 const path = require("path");
-const fs = require('fs');
-const {showNotification} = require("./feature");
+const fs = require("fs");
 
 exports.isMac = function () {
   return os.platform() === "darwin";
@@ -25,19 +24,21 @@ exports.getLogPath = function () {
     "CollectionState.json"
   );
   const exist = fs.existsSync(filePath);
-  if(!exist) {
-    showNotification({ title: '컬렉션 데이터가 존재하지 않습니다.', body: '데이터 경로에서 파일을 찾을 수 없습니다.' })
+  if (!exist) {
+    new Notification({
+      title: "컬렉션 데이터가 존재하지 않습니다.",
+      body: "데이터 경로에서 파일을 찾을 수 없습니다.",
+    }).show();
   }
   return filePath;
 };
 
-
-exports.debounce = function(callback, limit = 100) {
-  let timer
-  return function(...args) {
-      clearTimeout(timer)
-      timer = setTimeout(() => {
-          callback.apply(this, args)
-      }, limit)
-  }
-}
+exports.debounce = function (callback, limit = 100) {
+  let timer;
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      callback.apply(this, args);
+    }, limit);
+  };
+};
