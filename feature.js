@@ -20,7 +20,7 @@ exports.dataSync = function () {
     new Set(json.ServerState.Cards.map((c) => c.CardDefId))
   );
 
-  upsert(profileId, cards);
+  upsert(profileId, cards, { open: true });
 };
 
 exports.autoSync = function () {
@@ -36,7 +36,7 @@ exports.autoSync = function () {
         new Set(json.ServerState.Cards.map((c) => c.CardDefId))
       );
 
-      upsert(profileId, cards);
+      upsert(profileId, cards, { open: false });
     }),
     1000 * 10
   );

@@ -13,7 +13,7 @@ const { shell } = require("electron");
 exports.upsert = function (profileId, cards, { open = false }) {
   return new Promise((resolve, reject) => {
     axios
-      .post(`https://snapsco.net/api/user/collection/`, {
+      .post(`https://snapsco.net/api/user/collection`, {
         profileId,
         cards,
       })
